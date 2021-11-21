@@ -1,0 +1,28 @@
+html {
+  box-sizing: border-box;
+  min-height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #181818;
+  color: white;
+}
+
+#root {
+  min-height: 100vh;
+}
