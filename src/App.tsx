@@ -3,6 +3,7 @@ import { useState } from 'react';
 import './App.css';
 import { DatePicker } from './components/DatePicker';
 import { BASE_URL } from './constants';
+import { Github } from './icons/Github';
 import { MarketRange } from './types';
 import { getDate } from './utils';
 
@@ -170,6 +171,14 @@ function App() {
         src="https://upload.wikimedia.org/wikipedia/en/5/54/Scrooge_McDuck.png"
         alt="Scrooge McDuck"
       />
+      <a
+        href="https://github.com/pkarabiberis/scroogesbtctracker"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <Github />
+      </a>
+
       <h1>Scrooge McDuck's Bitcoin Tracker</h1>
       <DatePicker getBitcoinData={getBitcoinData} />
       {loading ? (
