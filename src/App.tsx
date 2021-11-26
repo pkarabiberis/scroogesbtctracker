@@ -3,9 +3,10 @@ import { useState } from 'react';
 import './App.css';
 import { DatePicker } from './components/DatePicker';
 import { BASE_URL } from './constants';
-import { Github } from './icons/Github';
-import { MarketRange } from './types';
+import { Github } from './components/icons/Github';
+import { BTCDailyValues, MarketRange } from './types';
 import { getDate } from './utils';
+import { BitcoinDetails } from './components/BitcoinDetails';
 
 function App() {
   const [downwardTrend, setDownwardTrend] = useState<number | null>(null);
@@ -13,15 +14,14 @@ function App() {
     date: string;
     volume: string;
   } | null>(null);
+
   const [buyAndSellDays, setBuyAndSellDays] = useState<{
     buy?: string;
     sell?: string;
-    text?: string;
   } | null>(null);
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  let userFriendlyText;
 
   const getBitcoinData = async (from: number, to: number) => {
     setLoading(true);
@@ -38,7 +38,7 @@ function App() {
       seperateDays(data.prices, data.total_volumes);
     } catch (err) {
       setLoading(false);
-      setError(`An error occured: ${err}`);
+      setError(`An error occured. Please try again`);
     }
   };
 
@@ -60,7 +60,7 @@ function App() {
       return days;
     }, {});
 
-    const dayArr: { price: number; volume: number; ts: string }[] = [];
+    const dayArr: BTCDailyValues = [];
 
     // push objects to array
     Object.keys(dayValues).forEach((day) => {
@@ -70,9 +70,7 @@ function App() {
     findBitcoinDetails(dayArr);
   };
 
-  const findBitcoinDetails = (
-    dayArr: { price: number; volume: number; ts: string }[]
-  ) => {
+  const findBitcoinDetails = (dayArr: BTCDailyValues) => {
     // for saving downward trend
     let highestStreak = 0;
     let currentStreak = 0;
@@ -130,16 +128,15 @@ function App() {
     });
 
     setBuyAndSellDays({
-      buy: buyAndSellDates?.buy,
-      sell: buyAndSellDates?.sell,
-      text: maxProfit === 0 ? 'Dont!' : '',
+      buy: maxProfit === 0 ? "Don't!" : buyAndSellDates?.buy,
+      sell: maxProfit === 0 ? "Don't!" : buyAndSellDates?.sell,
     });
   };
 
   // since we have the max profit value saved, find the dates by substraction
   // set the value when match is found
   const findDatesToBuyAndSell = (
-    dayArr: { price: number; volume: number; ts: string }[],
+    dayArr: BTCDailyValues,
     profit: number
   ): { buy: string; sell: string } => {
     let dates = { buy: '', sell: '' };
@@ -157,20 +154,8 @@ function App() {
     return dates;
   };
 
-  if (downwardTrend === 0) {
-    userFriendlyText = <h3>Didn't decrease</h3>;
-  } else if (downwardTrend === 1) {
-    userFriendlyText = <h3>1 day in a row</h3>;
-  } else {
-    userFriendlyText = <h3>{downwardTrend} days in a row</h3>;
-  }
-
   return (
     <div className="App">
-      <img
-        src="https://upload.wikimedia.org/wikipedia/en/5/54/Scrooge_McDuck.png"
-        alt="Scrooge McDuck"
-      />
       <a
         href="https://github.com/pkarabiberis/scroogesbtctracker"
         target="_blank"
@@ -181,44 +166,15 @@ function App() {
 
       <h1>Scrooge McDuck's Bitcoin Tracker</h1>
       <DatePicker getBitcoinData={getBitcoinData} />
-      {loading ? (
-        <p style={{ marginTop: '25px' }}>Loading...</p>
-      ) : (
-        <div className="btc-container">
-          <div className="btc-downward-trend">
-            <p>Downward trend</p>
-            {downwardTrend !== null && userFriendlyText}
-          </div>
-          <div className="btc-highest-volume">
-            <p>Highest volume</p>
-            {highestVolume && (
-              <h3>
-                {highestVolume.volume}
-                <br />
-                on {highestVolume.date}
-              </h3>
-            )}
-          </div>
-          <div className="btc-buy-stock">
-            <p>Buy</p>
-            {buyAndSellDays?.text ? (
-              <h3>{buyAndSellDays.text}</h3>
-            ) : buyAndSellDays?.buy ? (
-              <h3>{buyAndSellDays.buy}</h3>
-            ) : null}
-          </div>
-          <div className="btc-sell-stock">
-            <p>Sell</p>
-            {buyAndSellDays?.text ? (
-              <h3>{buyAndSellDays.text}</h3>
-            ) : buyAndSellDays?.sell ? (
-              <h3>{buyAndSellDays.sell}</h3>
-            ) : null}
-          </div>
+      <BitcoinDetails
+        downwardTrend={downwardTrend}
+        highestVolume={{ ...highestVolume }}
+        buyDate={buyAndSellDays?.buy}
+        sellDate={buyAndSellDays?.sell}
+      />
 
-          {error && <p>{error}</p>}
-        </div>
-      )}
+      {error && <p>{error}</p>}
+      {loading && <p>Loading...</p>}
     </div>
   );
 }

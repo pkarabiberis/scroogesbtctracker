@@ -3,3 +3,5 @@ export interface MarketRange {
   market_caps: Array<number[]>;
   total_volumes: Array<number[]>;
 }
+
+export type BTCDailyValues = { price: number; volume: number; ts: string }[];
