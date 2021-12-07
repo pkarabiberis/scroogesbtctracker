@@ -17,3 +17,17 @@ export const getUserFriendlyText = (downwardTrend?: number | null) => {
 
   return userFriendlyText;
 };
+
+export const formatMaxDate = () => {
+  const now = new Date();
+
+  const currentDay =
+    now.getDate() + 1 < 10 ? `0${now.getDate()}` : `${now.getDate()}`;
+
+  const currentMonth =
+    now.getMonth() + 1 < 10
+      ? `0${now.getMonth() + 1}`
+      : `${now.getMonth() + 1}`;
+
+  return `${now.getFullYear().toString()}-${currentMonth}-${currentDay}`;
+};

@@ -165,7 +165,7 @@ function App() {
       </a>
 
       <h1>Scrooge McDuck's Bitcoin Tracker</h1>
-      <DatePicker getBitcoinData={getBitcoinData} />
+      <DatePicker getBitcoinData={getBitcoinData} loading={loading} />
       <BitcoinDetails
         downwardTrend={downwardTrend}
         highestVolume={{ ...highestVolume }}
@@ -174,7 +174,6 @@ function App() {
       />
 
       {error && <p>{error}</p>}
-      {loading && <p>Loading...</p>}
     </div>
   );
 }
