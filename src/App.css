@@ -12,17 +12,38 @@
   font-weight: 700;
 }
 
-.App input {
+input {
   background-color: transparent;
   color: white;
 }
 
 .input-container {
   padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.input-container input {
-  margin: 10px;
+.input-container div {
+  padding: 20px;
+}
+
+input,
+label {
+  display: block;
+}
+
+label {
+  text-align: start;
+  padding: 5px 0;
+  font-size: 14px;
+  color: #b3b3b3;
+}
+
+.label__from::after {
+  content: '*';
+  color: red;
+  margin-left: 5px;
 }
 
 svg {
@@ -44,29 +65,32 @@ svg:hover {
   grid-template-columns: repeat(4, 1fr);
 
   column-gap: 10px;
-  margin-top: 25px;
+  margin-top: 20px;
   text-align: center;
 }
 
 @media (max-width: 768px) {
+  .App {
+    padding: 50px 25px;
+  }
+
   .btc-container {
     grid-template-columns: repeat(2, 1fr);
     min-height: 350px;
-  }
-
-  .input-container {
-    display: inline-flex;
-    flex-direction: column;
-  }
-
-  button {
-    margin-top: 15px;
   }
 }
 
 @media (max-width: 480px) {
   .btc-container {
     grid-template-columns: repeat(1, 1fr);
+  }
+
+  .input-container {
+    flex-direction: column;
+  }
+
+  .input-container div {
+    padding: 10px 20px;
   }
 }
 
@@ -98,6 +122,12 @@ button {
 button:hover {
   background-color: white;
   color: black;
+}
+
+button:disabled {
+  color: #b3b3b3;
+  border: 1px solid #b3b3b3;
+  pointer-events: none;
 }
 
 .button--loading .button__text {
